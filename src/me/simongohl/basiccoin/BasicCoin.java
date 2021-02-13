@@ -1,11 +1,18 @@
 package me.simongohl.basiccoin;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 /*
-* Just Hello Basic-Coin for now 
+* I think I'm on the right track??
 */
 public class BasicCoin {
 	public static void main(String[] agrs) {
-		System.out.println("Hello Basic-Coin!");
+	
+		ArrayList blockchain = new ArrayList<Block>();
+
+
 	}
 
 }
