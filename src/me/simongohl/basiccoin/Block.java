@@ -27,31 +27,33 @@ public class Block {
 		this.transactions = transactions;
 		this.time = time;
 		this.nonse = nonse;
-		this.hash = this.calcHash();
+		this.hash = this.calcBlockHash();
 	}
 	
-	public String calcHash() throws NoSuchAlgorithmException {
+	public String calcBlockHash() throws NoSuchAlgorithmException {
 		String hashTransactions = "";
 		for (Transaction t : this.transactions) {
-			hashTransactions += t.transactionHash;
+			hashTransactions += t.hash;
 		}
 		String hashStr = Utils.calcHash(hashTransactions);
 		return hashStr;
 	}
 	
-	public boolean mineBlock(int difficulty) throws NoSuchAlgorithmException {
-		int[] arr = new int[difficulty-1];
+	public boolean mineBlock(int miningDifficulty) throws NoSuchAlgorithmException {
+		int[] arr = new int[miningDifficulty];
 		for (int i = 0; i < arr.length; i++) {
 			arr[i] = i;
 		}
 		String str = Arrays.toString(arr);
 		do {
 			this.nonse++;
-			this.hash = this.calcHash();
-		} while (!str.substring(0, difficulty).equals(
-				(this.hash.substring(0, difficulty))));
+			this.hash = this.calcBlockHash();
+		} while (!str.substring(0, miningDifficulty).equals(
+				(this.hash.substring(0, miningDifficulty))));
 		
 		return true;
 	}
+	
+	
 	
 }
