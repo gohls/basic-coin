@@ -9,9 +9,11 @@ import java.security.NoSuchAlgorithmException;
  * https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
  */
 public class Utils {
-	
 	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
-	
+	/**
+	 * Converts the string into a SHA-256 encoded hex string.
+	 * @return Returns an encoded hex String.
+	 */
 	public static String calcHash(String str) throws NoSuchAlgorithmException {
 		final MessageDigest md = MessageDigest.getInstance("SHA-256");
 		final byte[] hashBytes = md.digest(str.getBytes(StandardCharsets.UTF_8));
