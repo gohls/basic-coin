@@ -3,6 +3,8 @@ package me.simongohl.basiccoin;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
+import me.simongohl.basiccoin.util.HashTool;
+
 public class Transaction {
 	String senderName;
 	String receiverName;
@@ -37,7 +39,7 @@ public class Transaction {
 						  this.coinAmount + 
 						  this.memo + 
 						  this.time;
-		String encodedHash = Utils.calcHash(tempHash);
+		String encodedHash = HashTool.calcHash(tempHash);
 		return encodedHash;
 	}
 
@@ -52,14 +54,15 @@ public class Transaction {
 		return isValid;
 	}
 	
-	public boolean signTransaction(String key, String senderKey) throws NoSuchAlgorithmException {
+	public boolean signTransaction(String key, String senderPrivateKey) throws NoSuchAlgorithmException {
 		boolean isSigned = true;
 		if(this.hash != this.calcTransactionHash()) {
 			isSigned = false;
 		}
 		
 		//@TODO missing impl
-		// Needs to verify wallet (i.e. run public key against private key)
+		// - Verify wallet 
+		// - Sign transaction with private key
 		
 		return isSigned;
 	}
