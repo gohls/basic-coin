@@ -1,9 +1,10 @@
 package me.simongohl.basiccoin;
 
-import java.nio.charset.StandardCharsets;
+//import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 
 
 /**
@@ -16,14 +17,14 @@ import java.util.Date;
 * @version 0.0.0
 */
 public class BasicCoin {
-	ArrayList<Block> blockchain;
+	LinkedList<Block> blockchain;
 	ArrayList<Transaction> pendingTransactions;
 	int miningDifficulty;
 	int blockSize;
 	
 	public BasicCoin() {
 		super();
-		this.blockchain = new ArrayList<Block>();
+		this.blockchain = new LinkedList<Block>();
 		this.pendingTransactions = new ArrayList<Transaction>();
 		this.miningDifficulty = 2;
 		this.blockSize = 5;
@@ -46,8 +47,8 @@ public class BasicCoin {
 			String senderKey) 
 					throws NoSuchAlgorithmException {
 		
-		final byte[] keyByte = keyStr.getBytes(StandardCharsets.US_ASCII);
-		final byte[] senderKeyByte = senderKey.getBytes(StandardCharsets.US_ASCII);
+//		final byte[] keyByte = keyStr.getBytes(StandardCharsets.US_ASCII);
+//		final byte[] senderKeyByte = senderKey.getBytes(StandardCharsets.US_ASCII);
 		
 		//@TODO Check stuff
 		
@@ -61,8 +62,10 @@ public class BasicCoin {
 		return true;
 	};
 	
-	public void minePendingTransactions() {
-		//@TODO missing impl
+	public void minePendingTransactions(String minerName) {
+//		for (Transaction t : this.pendingTransactions) {
+//			
+//		}
 	};
 	
 	@Override
@@ -82,6 +85,8 @@ public class BasicCoin {
 		BasicCoin basicCoin = new BasicCoin();
 		basicCoin.addGenesisBlock();
 		System.out.println(basicCoin);	
+		Block block = basicCoin.blockchain.get(0);
+		block.mineBlock(1);
 	}
 
 }

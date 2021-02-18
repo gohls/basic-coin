@@ -4,6 +4,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import me.simongohl.basiccoin.util.HashTool;
+
 public class Block {
 	String blockID;
 	String prevBlockID;
@@ -31,8 +33,8 @@ public class Block {
 		for (Transaction t : this.transactions) {
 			hashTransactions += t.hash;
 		}
-		String tempHash = this.time + hashTransactions + this.prevBlockID + Integer.toString(this.nonse); 
-		String encodedHash = Utils.calcHash(tempHash);
+		String tempHash = this.time + hashTransactions + this.prevBlockID + Integer.toString(nonse); 
+		String encodedHash = HashTool.calcHash(tempHash);
 		return encodedHash;
 	}
 	
@@ -46,6 +48,7 @@ public class Block {
 		do {
 			this.nonse++;
 			this.hash = this.calcBlockHash();
+			// System.out.println("\t Mining -- " + this.hash);
 		} while (!str.substring(0, miningDifficulty).equals(
 				(this.hash.substring(0, miningDifficulty))));
 		System.out.print("Mining done!");
