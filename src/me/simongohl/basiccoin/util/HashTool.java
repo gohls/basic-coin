@@ -1,4 +1,5 @@
-package me.simongohl.basiccoin;
+package me.simongohl.basiccoin.util;
+
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -8,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
  * Source: 
  * https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
  */
-public class Utils {
+public class HashTool {
 	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 	/**
 	 * Converts the string into a SHA-256 encoded hex string.
