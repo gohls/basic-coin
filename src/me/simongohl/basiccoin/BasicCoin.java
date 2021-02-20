@@ -34,8 +34,8 @@ public class BasicCoin {
 	public void addGenesisBlock() throws NoSuchAlgorithmException {
 		Transaction transaction = new Transaction("me", "you", 10, "genesis");
 		this.pendingTransactions.add(transaction);
-		Block gensis = new Block("0", "null", this.pendingTransactions, new Date().toString());
-		this.blockchain.add(gensis);
+		Block genesis = new Block("0", "null", this.pendingTransactions, new Date().toString());
+		this.blockchain.add(genesis);
 	};
 	
 	public boolean addTransaction(
@@ -86,7 +86,7 @@ public class BasicCoin {
 		basicCoin.addGenesisBlock();
 		System.out.println(basicCoin);	
 		Block block = basicCoin.blockchain.get(0);
-		block.mineBlock(1);
+		block.mineBlock(5);
 	}
 
 }
