@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 
+import me.simongohl.basiccoin.util.KeyTool;
+
 
 /**
 * BasicCoin is a simple implementation of blockchain technology,
@@ -26,8 +28,8 @@ public class BasicCoin {
 		super();
 		this.blockchain = new LinkedList<Block>();
 		this.pendingTransactions = new ArrayList<Transaction>();
-		this.miningDifficulty = 2;
-		this.blockSize = 5;
+		this.miningDifficulty = 5;
+		this.blockSize = 10;
 		
 	 }
 	
@@ -43,11 +45,11 @@ public class BasicCoin {
 			String receiverName, 
 			float coinAmount, 
 			String memo, 
-			String keyStr, 
+			String key, 
 			String senderKey) 
 					throws NoSuchAlgorithmException {
 		
-//		final byte[] keyByte = keyStr.getBytes(StandardCharsets.US_ASCII);
+//		final byte[] keyByte = key.getBytes(StandardCharsets.US_ASCII);
 //		final byte[] senderKeyByte = senderKey.getBytes(StandardCharsets.US_ASCII);
 		
 		//@TODO Check stuff
@@ -77,6 +79,7 @@ public class BasicCoin {
 					"Block Time: \t" + b.time + "\n" +
 					"Block Hash: \t" + b.hash + "\n";
 		}
+		
 		return temp;
 	}
 	
@@ -87,6 +90,7 @@ public class BasicCoin {
 		System.out.println(basicCoin);	
 		Block block = basicCoin.blockchain.get(0);
 		block.mineBlock(5);
+		KeyTool.keyPairGenerator();
 	}
 
 }
