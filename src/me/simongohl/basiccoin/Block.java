@@ -2,7 +2,6 @@ package me.simongohl.basiccoin;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import me.simongohl.basiccoin.util.HashTool;
 
@@ -11,11 +10,11 @@ public class Block {
 	String prevBlockID;
 	ArrayList<Transaction> transactions;
 	String time;
-	int nonse;
+	int nonce;
 	String hash;
 	
 	public Block() {
-		this.nonse = 0;	
+		this.nonce = 0;	
 	}
 	
 	public Block(String blockID, String prevBlockID, ArrayList<Transaction> transactions, String time) 
@@ -33,12 +32,14 @@ public class Block {
 		for (Transaction t : this.transactions) {
 			hashTransactions += t.hash;
 		}
-		String tempHash = this.time + hashTransactions + this.prevBlockID + Integer.toString(nonse); 
+		
+		String tempHash = this.time + hashTransactions + this.prevBlockID + Integer.toString(nonce); 
 		String encodedHash = HashTool.calcHash(tempHash);
+		
 		return encodedHash;
 	}
 	
-	public boolean mineBlock(int miningDifficulty) throws NoSuchAlgorithmException {
+	public void mineBlock(int miningDifficulty) throws NoSuchAlgorithmException {
 		String hashStartsWith = "";
 		for (int i = 0; i < miningDifficulty; i++) {
 			hashStartsWith += i;
@@ -46,14 +47,11 @@ public class Block {
 
 		System.out.println("Mining start...");
 		do {
-			this.nonse++;
+			this.nonce++;
 			this.hash = this.calcBlockHash();
 		} while (!hashStartsWith.equals((this.hash.substring(0, miningDifficulty))));
-		// System.out.println("nonse: " + this.nonse);
-		// System.out.println("Block hash: " + this.hash);
-		System.out.print("Mining done!");
 		
-		return true;
+		System.out.print("Mining done!");
 	}
 	
 	public boolean hasValidTransactions() throws NoSuchAlgorithmException {
@@ -64,6 +62,7 @@ public class Block {
 				break;
 			}
 		}
+		
 		return hasValidTransactions;
 	}
 		

@@ -14,7 +14,6 @@ public class Transaction {
 	String hash;
 
 	public Transaction() {
-		this.senderName = "Anon";
 		this.memo = "";
 	}
 
@@ -40,6 +39,7 @@ public class Transaction {
 						  this.memo + 
 						  this.time;
 		String encodedHash = HashTool.calcHash(tempHash);
+		
 		return encodedHash;
 	}
 
@@ -51,14 +51,18 @@ public class Transaction {
 				this.coinAmount <= 0) {
 			isValid = false;
 		}
+		
+		//@TODO check for signature
+		
 		return isValid;
 	}
 	
-	public boolean signTransaction(String key, String senderPrivateKey) throws NoSuchAlgorithmException {
+	public boolean signTransaction(String key, String senderKey) throws NoSuchAlgorithmException {
 		boolean isSigned = true;
 		if(this.hash != this.calcTransactionHash()) {
 			isSigned = false;
 		}
+
 		
 		//@TODO missing impl
 		// - Verify wallet 
