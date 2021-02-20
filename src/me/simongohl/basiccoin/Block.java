@@ -39,19 +39,20 @@ public class Block {
 	}
 	
 	public boolean mineBlock(int miningDifficulty) throws NoSuchAlgorithmException {
-		int[] arr = new int[miningDifficulty];
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = i;
+		String hashStartsWith = "";
+		for (int i = 0; i < miningDifficulty; i++) {
+			hashStartsWith += i;
 		}
-		String str = Arrays.toString(arr);
+
 		System.out.println("Mining start...");
 		do {
 			this.nonse++;
 			this.hash = this.calcBlockHash();
-			// System.out.println("\t Mining -- " + this.hash);
-		} while (!str.substring(0, miningDifficulty).equals(
-				(this.hash.substring(0, miningDifficulty))));
+		} while (!hashStartsWith.equals((this.hash.substring(0, miningDifficulty))));
+		// System.out.println("nonse: " + this.nonse);
+		// System.out.println("Block hash: " + this.hash);
 		System.out.print("Mining done!");
+		
 		return true;
 	}
 	
