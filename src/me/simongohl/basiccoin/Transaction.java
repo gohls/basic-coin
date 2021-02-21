@@ -43,7 +43,33 @@ public class Transaction {
 		
 		return encodedHash;
 	}
-
+	
+	//@TODO is passing in all wallets a good way of doing this?
+	public boolean signTransaction(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
+		boolean isSigned = true;
+		if(this.hash != this.calcTransactionHash()) {
+			isSigned = false;
+		}
+		if(!wallets.containsKey(this.senderName) || !wallets.containsKey(this.receiverName)) {
+			isSigned = false;
+		}
+		
+		try {
+			byte[] transactionBytes = this.hash.getBytes(StandardCharsets.UTF_8);
+			Signature sig = Signature.getInstance("SHA256withRSA");
+			Wallet senderWallet = (Wallet) wallets.get(senderName);
+			sig.initSign(senderWallet.getPrivateKey());
+			sig.update(transactionBytes);
+			byte[] signatureBytes = sig.sign();
+			this.signature = Base64.getEncoder().encodeToString(signatureBytes);
+		} catch (Exception e){
+			isSigned = false;
+		}
+		
+		return isSigned;
+	}
+	
+	//@TODO is passing in all wallets a good way of doing this?
 	public boolean isValidTransaction(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
 		boolean isValid = true;
 		if (
@@ -69,30 +95,6 @@ public class Transaction {
 		}
 		
 		return isValid;
-	}
-	
-	public boolean signTransaction(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
-		boolean isSigned = true;
-		if(this.hash != this.calcTransactionHash()) {
-			isSigned = false;
-		}
-		if(!wallets.containsKey(this.senderName) || !wallets.containsKey(this.receiverName)) {
-			isSigned = false;
-		}
-		
-		try {
-			byte[] transactionBytes = this.hash.getBytes(StandardCharsets.UTF_8);
-			Signature sig = Signature.getInstance("SHA256withRSA");
-			Wallet senderWallet = (Wallet) wallets.get(senderName);
-			sig.initSign(senderWallet.getPrivateKey());
-			sig.update(transactionBytes);
-			byte[] signatureBytes = sig.sign();
-			this.signature = Base64.getEncoder().encodeToString(signatureBytes);
-		} catch (Exception e){
-			isSigned = false;
-		}
-		
-		return isSigned;
 	}
 	
 }
