@@ -24,20 +24,21 @@ public class BasicCoin {
 	LinkedList<Block> blockchain;
 	ArrayList<Transaction> pendingTransactions;
 	Hashtable<String, Wallet> wallets;
-	int miningDifficulty;
-	int blockSize;
+	final int miningDifficulty;
+	final int blockSize;
+	final int miningReward;
 	
 	public BasicCoin() {
 		this.blockchain = new LinkedList<Block>();
 		this.pendingTransactions = new ArrayList<Transaction>();
 		this.wallets = new Hashtable<String, Wallet>();
-		this.miningDifficulty = 5;
+		this.miningDifficulty = 3;
 		this.blockSize = 10;
-		
+		this.miningReward = 10;
 	 }
 	
 	public void addGenesisBlock() throws NoSuchAlgorithmException {
-		Transaction transaction = new Transaction("me", "you", 10, "genesis");
+		Transaction transaction = new Transaction("me", "you", 1, "genesis");
 		this.pendingTransactions.add(transaction);
 		Block genesis = new Block("0", "null", this.pendingTransactions, new Date().toString());
 		this.blockchain.add(genesis);
@@ -49,9 +50,7 @@ public class BasicCoin {
 			String senderName, 
 			String receiverName, 
 			int coinAmount, 
-			String memo, 
-			String key, 
-			String senderKey) 
+			String memo) 
 					throws NoSuchAlgorithmException {
 		
 		Transaction transaction = new Transaction(senderName, receiverName, coinAmount, memo);
@@ -68,6 +67,8 @@ public class BasicCoin {
 //		for (Transaction t : this.pendingTransactions) {
 //			
 //		}
+		
+//		@TODO give mining reward 
 	};
 	
 	@Override
