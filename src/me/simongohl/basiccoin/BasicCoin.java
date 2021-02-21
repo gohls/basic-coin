@@ -4,9 +4,11 @@ package me.simongohl.basiccoin;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.LinkedList;
 
 import me.simongohl.basiccoin.util.KeyTool;
+import me.simongohl.basiccoin.wallet.Wallet;
 
 
 /**
@@ -21,13 +23,14 @@ import me.simongohl.basiccoin.util.KeyTool;
 public class BasicCoin {
 	LinkedList<Block> blockchain;
 	ArrayList<Transaction> pendingTransactions;
+	Hashtable<String, Wallet> wallets;
 	int miningDifficulty;
 	int blockSize;
 	
 	public BasicCoin() {
-		super();
 		this.blockchain = new LinkedList<Block>();
 		this.pendingTransactions = new ArrayList<Transaction>();
+		this.wallets = new Hashtable<String, Wallet>();
 		this.miningDifficulty = 5;
 		this.blockSize = 10;
 		
@@ -40,27 +43,24 @@ public class BasicCoin {
 		this.blockchain.add(genesis);
 	};
 	
+	// @TODO public addWallet() {}
+	
 	public boolean addTransaction(
 			String senderName, 
 			String receiverName, 
-			float coinAmount, 
+			int coinAmount, 
 			String memo, 
 			String key, 
 			String senderKey) 
 					throws NoSuchAlgorithmException {
 		
-//		final byte[] keyByte = key.getBytes(StandardCharsets.US_ASCII);
-//		final byte[] senderKeyByte = senderKey.getBytes(StandardCharsets.US_ASCII);
-		
-		//@TODO Check stuff
-		
 		Transaction transaction = new Transaction(senderName, receiverName, coinAmount, memo);
+		transaction.signTransaction(this.wallets);
 		
-		//@TODO Sign transaction here
-		
-		if (!transaction.isValidTransaction()) {
+		if (!transaction.isValidTransaction(this.wallets)) {
 			return false;
 		}
+		
 		return true;
 	};
 	
