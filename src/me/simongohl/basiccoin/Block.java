@@ -2,8 +2,10 @@ package me.simongohl.basiccoin;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import me.simongohl.basiccoin.util.HashTool;
+import me.simongohl.basiccoin.wallet.Wallet;
 
 public class Block {
 	String blockID;
@@ -54,10 +56,10 @@ public class Block {
 		System.out.print("Mining done!");
 	}
 	
-	public boolean hasValidTransactions() throws NoSuchAlgorithmException {
+	public boolean hasValidTransactions(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
 		boolean hasValidTransactions = true;
 		for(Transaction t : this.transactions) {
-			if(!t.isValidTransaction()) {
+			if(!t.isValidTransaction(wallets)) {
 				hasValidTransactions = false;
 				break;
 			}
