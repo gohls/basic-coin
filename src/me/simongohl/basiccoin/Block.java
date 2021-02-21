@@ -12,16 +12,11 @@ public class Block {
 	String prevBlockID;
 	ArrayList<Transaction> transactions;
 	String time;
-	int nonce;
+	private int nonce = 0;
 	String hash;
-	
-	public Block() {
-		this.nonce = 0;	
-	}
 	
 	public Block(String blockID, String prevBlockID, ArrayList<Transaction> transactions, String time) 
 			throws NoSuchAlgorithmException {
-		super();
 		this.blockID = blockID;
 		this.prevBlockID = prevBlockID;
 		this.transactions = transactions;
