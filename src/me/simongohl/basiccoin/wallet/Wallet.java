@@ -6,11 +6,13 @@ import java.security.PublicKey;
 
 public class Wallet {
 	private String name; 
-	private PrivateKey privateKey;
-	private PublicKey publicKey;
+	private int coinAmount;
+	final private PrivateKey privateKey;
+	final private PublicKey publicKey;
 	
 	public Wallet(String name, KeyPair pair){
 		this.name = name;
+		this.coinAmount = 100;
 		this.privateKey = pair.getPrivate();
 		this.publicKey = pair.getPublic();
 	}
@@ -22,21 +24,21 @@ public class Wallet {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public int getCoinAmount() {
+		return coinAmount;
+	}
+
+	public void setCoinAmount(int coinAmount) {
+		this.coinAmount = coinAmount;
+	}
 
 	public PrivateKey getPrivateKey() {
 		return privateKey;
 	}
 
-	public void setPrivateKey(PrivateKey privateKey) {
-		this.privateKey = privateKey;
-	}
-
 	public PublicKey getPublicKey() {
 		return publicKey;
-	}
-
-	public void setPublicKey(PublicKey publicKey) {
-		this.publicKey = publicKey;
 	}
 
 }
