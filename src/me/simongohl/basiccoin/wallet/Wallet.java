@@ -1,20 +1,27 @@
 package me.simongohl.basiccoin.wallet;
 
 import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import me.simongohl.basiccoin.util.KeyTool;
+
 public class Wallet {
 	private String name; 
-	private int coinAmount;
-	final private PrivateKey privateKey;
-	final private PublicKey publicKey;
+	private int balance = 100;
+	private final PrivateKey privateKey;
+	private final PublicKey publicKey;
 	
-	public Wallet(String name, KeyPair pair){
+	public Wallet(String name, int balance) throws NoSuchAlgorithmException{
 		this.name = name;
-		this.coinAmount = 100;
-		this.privateKey = pair.getPrivate();
-		this.publicKey = pair.getPublic();
+		this.balance = balance;
+		this.privateKey = this.generateKeys().getPrivate();
+		this.publicKey = this.generateKeys().getPublic();
+	}
+	
+	private KeyPair generateKeys() throws NoSuchAlgorithmException {
+		return KeyTool.keyPairGenerator();
 	}
 
 	public String getName() {
@@ -25,20 +32,22 @@ public class Wallet {
 		this.name = name;
 	}
 	
-	public int getCoinAmount() {
-		return coinAmount;
+	public int getBalance() {
+		return balance;
 	}
 
-	public void setCoinAmount(int coinAmount) {
-		this.coinAmount = coinAmount;
-	}
-
-	public PrivateKey getPrivateKey() {
-		return privateKey;
+	//@TODO needs work
+	public void setBalance(int balance) {
+		this.balance = balance;
 	}
 
 	public PublicKey getPublicKey() {
 		return publicKey;
+	}
+
+	//@TODO not secure; needs work
+	public PrivateKey getPrivateKey() {
+		return this.privateKey;
 	}
 
 }
