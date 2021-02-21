@@ -1,35 +1,36 @@
 package me.simongohl.basiccoin;
 
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
+import java.util.Base64;
 import java.util.Date;
+import java.util.Hashtable;
 
 import me.simongohl.basiccoin.util.HashTool;
+import me.simongohl.basiccoin.wallet.Wallet;
 
 public class Transaction {
 	String senderName;
 	String receiverName;
-	float coinAmount;
-	String memo;
+	int coinAmount;
+	String memo = "";
 	String time; // dow mon dd hh:mm:ss zzz yyyy
 	String hash;
-
-	public Transaction() {
-		this.memo = "";
-	}
+	String signature;
 
 	public Transaction(
 			String senderName, 
 			String receiverName, 
-			float coinAmount, 
+			int coinAmount, 
 			String memo) 
 					throws NoSuchAlgorithmException {
-		super();
 		this.senderName = senderName;
 		this.receiverName = receiverName;
 		this.coinAmount = coinAmount;
 		this.memo = memo;
 		this.time = new Date().toString();
-		this.hash = this.calcTransactionHash();
+		this.hash = this.calcTransactionHash(); 
 	}
 
 	public String calcTransactionHash() throws NoSuchAlgorithmException {
@@ -43,7 +44,7 @@ public class Transaction {
 		return encodedHash;
 	}
 
-	public boolean isValidTransaction() throws NoSuchAlgorithmException {
+	public boolean isValidTransaction(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
 		boolean isValid = true;
 		if (
 				this.senderName == this.receiverName || 
@@ -52,21 +53,44 @@ public class Transaction {
 			isValid = false;
 		}
 		
-		//@TODO check for signature
+		try {
+			byte[] transactionBytes = this.hash.getBytes(StandardCharsets.UTF_8);
+			Signature sig = Signature.getInstance("SHA256withRSA");
+			Wallet senderWallet =  (Wallet) wallets.get(senderName);
+			sig.initVerify(senderWallet.getPublicKey());
+			sig.update(transactionBytes);
+			byte[] signatureBytes = Base64.getDecoder().decode(this.signature);
+			
+			if(!sig.verify(signatureBytes)){
+				isValid = false;
+			}
+		} catch (Exception e){
+			isValid = false;
+		}
 		
 		return isValid;
 	}
 	
-	public boolean signTransaction(String key, String senderKey) throws NoSuchAlgorithmException {
+	public boolean signTransaction(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
 		boolean isSigned = true;
 		if(this.hash != this.calcTransactionHash()) {
 			isSigned = false;
 		}
-
+		if(!wallets.containsKey(this.senderName) || !wallets.containsKey(this.receiverName)) {
+			isSigned = false;
+		}
 		
-		//@TODO missing impl
-		// - Verify wallet 
-		// - Sign transaction with private key
+		try {
+			byte[] transactionBytes = this.hash.getBytes(StandardCharsets.UTF_8);
+			Signature sig = Signature.getInstance("SHA256withRSA");
+			Wallet senderWallet = (Wallet) wallets.get(senderName);
+			sig.initSign(senderWallet.getPrivateKey());
+			sig.update(transactionBytes);
+			byte[] signatureBytes = sig.sign();
+			this.signature = Base64.getEncoder().encodeToString(signatureBytes);
+		} catch (Exception e){
+			isSigned = false;
+		}
 		
 		return isSigned;
 	}
