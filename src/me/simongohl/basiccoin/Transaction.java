@@ -17,7 +17,7 @@ public class Transaction {
 	String memo = "";
 	String time; // dow mon dd hh:mm:ss zzz yyyy
 	String hash;
-	String signature;
+	private String signature;
 
 	public Transaction(
 			String senderName, 
@@ -62,8 +62,10 @@ public class Transaction {
 			sig.update(transactionBytes);
 			byte[] signatureBytes = sig.sign();
 			this.signature = Base64.getEncoder().encodeToString(signatureBytes);
+			System.out.println("Transaction signed!");
 		} catch (Exception e){
 			isSigned = false;
+			System.out.println("Error signing...");
 		}
 		
 		return isSigned;
