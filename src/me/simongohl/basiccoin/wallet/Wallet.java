@@ -13,6 +13,12 @@ public class Wallet {
 	private final PrivateKey privateKey;
 	private final PublicKey publicKey;
 	
+	/**
+	 * 
+	 * @param name
+	 * @param balance
+	 * @throws NoSuchAlgorithmException
+	 */
 	public Wallet(String name, int balance) throws NoSuchAlgorithmException{
 		this.name = name;
 		this.balance = balance;
@@ -45,7 +51,7 @@ public class Wallet {
 		return publicKey;
 	}
 
-	//@TODO not secure; needs work
+	//@TODO 🤦 🙅‍♂️ 🚨 not secure; needs work 🤷
 	public PrivateKey getPrivateKey() {
 		return this.privateKey;
 	}

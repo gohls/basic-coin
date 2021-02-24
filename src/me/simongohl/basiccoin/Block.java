@@ -15,6 +15,14 @@ public class Block {
 	private int nonce = 0;
 	String hash;
 	
+	/**
+	 * 
+	 * @param String blockID
+	 * @param String prevBlockID
+	 * @param ArrayList<Transaction> transactions
+	 * @param String time
+	 * @throws NoSuchAlgorithmException
+	 */
 	public Block(String blockID, String prevBlockID, ArrayList<Transaction> transactions, String time) 
 			throws NoSuchAlgorithmException {
 		this.blockID = blockID;
@@ -48,7 +56,8 @@ public class Block {
 			this.hash = this.calcBlockHash();
 		} while (!hashStartsWith.equals((this.hash.substring(0, miningDifficulty))));
 		
-		System.out.print("Mining done!");
+		System.out.println("Mining done!");
+		System.out.println("Block hash:" + this.hash);
 	}
 	
 	public boolean hasValidTransactions(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
@@ -62,5 +71,17 @@ public class Block {
 		
 		return hasValidTransactions;
 	}
+	
+	@Override
+	public String toString() {
+		String tempStr = "";
+		tempStr += "Block ID: \t" + this.blockID + "\n" +
+				"Prev Block ID: \t" + this.prevBlockID + "\n" +
+				"Block Time: \t" + this.time + "\n" +
+				"Block Hash: \t" + this.hash + "\n";
+
+		return tempStr;
+	}
+	
 		
 }
