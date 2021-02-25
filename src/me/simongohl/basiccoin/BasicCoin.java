@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
 
 import me.simongohl.basiccoin.util.KeyTool;
 import me.simongohl.basiccoin.wallet.Wallet;
@@ -23,16 +23,16 @@ import me.simongohl.basiccoin.wallet.Wallet;
 public class BasicCoin {
 	public static final int MAX_BLOCK_SIZE = 10;
 	
-	LinkedList<Block> blockchain;
+	LinkedHashMap<String, Block> blockchain;
 	ArrayList<Transaction> pendingTransactions;
-	//@TODO not sure if I want wallets in here 🤷..not secure!!!
+	//@TODO Not sure if I want wallets in here 🤷..not secure!!!
 	Hashtable<String, Wallet> wallets; 
 	int miningDifficulty;
 	final int miningReward;
 	
 	public BasicCoin() {
 		//@TODO Hmm should I make this a hashtable or my own linked list Node impl ??
-		this.blockchain = new LinkedList<Block>();
+		this.blockchain = new LinkedHashMap<String, Block>();
 		this.pendingTransactions = new ArrayList<Transaction>();
 		this.wallets = new Hashtable<String, Wallet>();
 		this.miningDifficulty = 3;
@@ -43,11 +43,23 @@ public class BasicCoin {
 		Transaction transaction = new Transaction("Basic", "Coin", 1, "genesis");
 		this.pendingTransactions.add(transaction);
 		Block genesis = new Block("0", "null", this.pendingTransactions, new Date().toString());
-		this.blockchain.add(genesis);
+		this.blockchain.put(getLastBlockHash(), genesis);
+	}
+	
+	public String getLastBlockHash() {
+		String lastBlockHash = null;
+		for(String blockhash: this.blockchain.keySet()) {
+			lastBlockHash = blockhash; 
+		}
+		return lastBlockHash;
 	}
 	
 	public Block getLastBlock() {
-		return this.blockchain.getLast();
+		Block lastBlock = null;
+		for(Block block: this.blockchain.values()) {
+			lastBlock = block; 
+		}
+		return lastBlock;
 	}
 	
 	public boolean addTransaction(
@@ -66,18 +78,23 @@ public class BasicCoin {
 	}
 	
 	public void minePendingTransactions(String minerName) throws NoSuchAlgorithmException {
-//		ArrayList<Transaction> tempPendingTransactions = new ArrayList<Transaction>();
-//		for (int i = 0; i < this.pendingTransactions.size(); ++i) {
-//			tempPendingTransactions.add(this.pendingTransactions.get(i - 1));
-//			if(i % MAX_BLOCK_SIZE == 0) {
-//				Block lastBlock = this.getLastBlock();
-//				Block newBlock = new Block("here", lastBlock.blockID, tempPendingTransactions, new Date().toString());
-//				this.blockchain.add(newBlock);
-//				tempPendingTransactions.removeAll(tempPendingTransactions);
-//			}
-//		}
+		ArrayList<Transaction> tempPendingTransactions = new ArrayList<Transaction>();
+		for (int i = 0; i < this.pendingTransactions.size(); ++i) {
+			tempPendingTransactions.add(this.pendingTransactions.get(i - 1));
+			if(i % MAX_BLOCK_SIZE == 0) {
+				Block newBlock = new Block(
+						String.valueOf(this.blockchain.size()), 
+						this.getLastBlockHash(), 
+						tempPendingTransactions, 
+						new Date().toString());
+				String newBlockHash = newBlock.computeBlockHash();
+				this.blockchain.put(newBlockHash, newBlock);
+				tempPendingTransactions.removeAll(tempPendingTransactions);
+				// Reward miner 👷 ⛏ 💰️
+			}
+		}
 		
-//		@TODO give mining reward 
+
 	}
 	
 	public Wallet addWallet(String name, int balance) throws NoSuchAlgorithmException {
@@ -95,7 +112,7 @@ public class BasicCoin {
 	@Override
 	public String toString() {
 		String tempStr = "";
-		for (Block b : this.blockchain) {
+		for (Block b : this.blockchain.values()) {
 			tempStr += "Block ID: \t" + b.blockID + "\n" +
 					"Prev Block ID: \t" + b.prevBlockID + "\n" +
 					"Block Time: \t" + b.time + "\n" +
