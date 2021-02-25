@@ -29,10 +29,10 @@ public class Block {
 		this.prevBlockID = prevBlockID;
 		this.transactions = transactions;
 		this.time = time;
-		this.hash = this.calcBlockHash();
+		this.hash = this.computeBlockHash();
 	}
 	
-	public String calcBlockHash() throws NoSuchAlgorithmException {
+	public String computeBlockHash() throws NoSuchAlgorithmException {
 		String hashTransactions = "";		
 		for (Transaction t : this.transactions) {
 			hashTransactions += t.hash;
@@ -53,7 +53,7 @@ public class Block {
 		System.out.println("Mining start...");
 		do {
 			this.nonce++;
-			this.hash = this.calcBlockHash();
+			this.hash = this.computeBlockHash();
 		} while (!hashStartsWith.equals((this.hash.substring(0, miningDifficulty))));
 		
 		System.out.println("Mining done!");

@@ -10,6 +10,7 @@ import java.util.Hashtable;
 import me.simongohl.basiccoin.util.HashTool;
 import me.simongohl.basiccoin.wallet.Wallet;
 
+
 public class Transaction {
 	String senderName;
 	String receiverName;
@@ -30,10 +31,10 @@ public class Transaction {
 		this.coinAmount = coinAmount;
 		this.memo = memo;
 		this.time = new Date().toString();
-		this.hash = this.calcTransactionHash(); 
+		this.hash = this.computeTransactionHash(); 
 	}
 
-	public String calcTransactionHash() throws NoSuchAlgorithmException {
+	public String computeTransactionHash() throws NoSuchAlgorithmException {
 		String tempHash = this.senderName + 
 						  this.receiverName + 
 						  this.coinAmount + 
@@ -47,7 +48,7 @@ public class Transaction {
 	//@TODO is passing in all wallets a good way of doing this?
 	public boolean signTransaction(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
 		boolean isSigned = true;
-		if(this.hash != this.calcTransactionHash()) {
+		if(this.hash != this.computeTransactionHash()) {
 			isSigned = false;
 		}
 		if(!wallets.containsKey(this.senderName) || !wallets.containsKey(this.receiverName)) {
@@ -76,7 +77,7 @@ public class Transaction {
 		boolean isValid = true;
 		if (
 				this.senderName == this.receiverName || 
-				this.hash != this.calcTransactionHash() || 
+				this.hash != this.computeTransactionHash() || 
 				this.coinAmount <= 0) {
 			isValid = false;
 		}
