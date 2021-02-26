@@ -20,11 +20,19 @@ public class Transaction {
 	String hash;
 	private String signature;
 
+	/**
+	 * 
+	 * @param String senderName
+	 * @param String receiverName
+	 * @param String memo
+	 * @param int coinAmount
+	 * @throws NoSuchAlgorithmException
+	 */
 	public Transaction(
 			String senderName, 
 			String receiverName, 
-			int coinAmount, 
-			String memo) 
+			String memo,
+			int coinAmount) 
 					throws NoSuchAlgorithmException {
 		this.senderName = senderName;
 		this.receiverName = receiverName;
@@ -48,13 +56,20 @@ public class Transaction {
 	//@TODO is passing in all wallets a good way of doing this?
 	public boolean signTransaction(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
 		boolean isSigned = true;
-		if(this.hash != this.computeTransactionHash()) {
+		System.out.println("\n this.hash: " + this.hash);
+		System.out.println("\n compute: " + this.computeTransactionHash());
+		if(!this.hash.equals(this.computeTransactionHash())) {
+			
 			isSigned = false;
 		}
+		System.out.print("\nCheck isSigned 1: " + isSigned);
+		System.out.println("\n sender: " + wallets.containsKey(this.senderName));
+		System.out.println("\n receiver: " + wallets.containsKey(this.receiverName));
 		if(!wallets.containsKey(this.senderName) || !wallets.containsKey(this.receiverName)) {
+			System.out.println("\n Goes in here");
 			isSigned = false;
 		}
-		
+		System.out.print("\nCheck isSigned 2: " + isSigned);
 		try {
 			byte[] transactionBytes = this.hash.getBytes(StandardCharsets.UTF_8);
 			Signature sig = Signature.getInstance("SHA256withRSA");
@@ -63,11 +78,12 @@ public class Transaction {
 			sig.update(transactionBytes);
 			byte[] signatureBytes = sig.sign();
 			this.signature = Base64.getEncoder().encodeToString(signatureBytes);
-			System.out.println("Transaction signed!");
+			System.out.println("\nTransaction signed!");
 		} catch (Exception e){
 			isSigned = false;
-			System.out.println("Error signing...");
+			System.out.println("\nError signing...");
 		}
+		System.out.print("\nCheck isSigned 3: " + isSigned);
 		
 		return isSigned;
 	}
@@ -76,12 +92,12 @@ public class Transaction {
 	public boolean isValidTransaction(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
 		boolean isValid = true;
 		if (
-				this.senderName == this.receiverName || 
-				this.hash != this.computeTransactionHash() || 
+				this.senderName.equals(this.receiverName) || 
+				!this.hash.equals(this.computeTransactionHash()) || 
 				this.coinAmount <= 0) {
 			isValid = false;
 		}
-		
+		System.out.print("\n isValid 1: " + isValid);
 		try {
 			byte[] transactionBytes = this.hash.getBytes(StandardCharsets.UTF_8);
 			Signature sig = Signature.getInstance("SHA256withRSA");
@@ -91,13 +107,22 @@ public class Transaction {
 			byte[] signatureBytes = Base64.getDecoder().decode(this.signature);
 			
 			if(!sig.verify(signatureBytes)){
+				System.out.println("if verify");
 				isValid = false;
+			} else {
+				System.out.println("\nTransaction validated!");
 			}
 		} catch (Exception e){
 			isValid = false;
+			System.out.println("\nError: " + e);
 		}
-		
+		System.out.print("\n isValid 2: " + isValid);
 		return isValid;
+	}
+
+	@Override
+	public String toString() {
+		return "\nPending Transaction: " + this.senderName + " is added " + this.coinAmount + " BasicCoin to " + this.receiverName + " wallet.";
 	}
 	
 }
