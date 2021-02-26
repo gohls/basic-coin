@@ -8,8 +8,8 @@ import me.simongohl.basiccoin.util.HashTool;
 import me.simongohl.basiccoin.wallet.Wallet;
 
 public class Block {
-	String blockID;
-	String prevBlockID;
+	int index;
+	String prevBlockHash;
 	ArrayList<Transaction> transactions;
 	String time;
 	private int nonce = 0;
@@ -17,16 +17,16 @@ public class Block {
 	
 	/**
 	 * 
-	 * @param String blockID
-	 * @param String prevBlockID
+	 * @param String index
+	 * @param String prevBlockHash
 	 * @param ArrayList<Transaction> transactions
 	 * @param String time
 	 * @throws NoSuchAlgorithmException
 	 */
-	public Block(String blockID, String prevBlockID, ArrayList<Transaction> transactions, String time) 
+	public Block(int index, String prevBlockHash, ArrayList<Transaction> transactions, String time) 
 			throws NoSuchAlgorithmException {
-		this.blockID = blockID;
-		this.prevBlockID = prevBlockID;
+		this.index = index;
+		this.prevBlockHash = prevBlockHash;
 		this.transactions = transactions;
 		this.time = time;
 		this.hash = this.computeBlockHash();
@@ -38,13 +38,14 @@ public class Block {
 			hashTransactions += t.hash;
 		}
 		
-		String tempHash = this.time + hashTransactions + this.prevBlockID + Integer.toString(nonce); 
+		String tempHash = this.time + hashTransactions + this.prevBlockHash + Integer.toString(nonce); 
 		String encodedHash = HashTool.calcHash(tempHash);
 		
 		return encodedHash;
 	}
 	
-	public void mineBlock(int miningDifficulty) throws NoSuchAlgorithmException {
+	public void mineBlock() throws NoSuchAlgorithmException {
+		int miningDifficulty = BasicCoin.MINING_DIFFICULTY;
 		String hashStartsWith = "";
 		for (int i = 0; i < miningDifficulty; i++) {
 			hashStartsWith += i;
@@ -75,10 +76,10 @@ public class Block {
 	@Override
 	public String toString() {
 		String tempStr = "";
-		tempStr += "Block ID: \t" + this.blockID + "\n" +
-				"Prev Block ID: \t" + this.prevBlockID + "\n" +
-				"Block Time: \t" + this.time + "\n" +
-				"Block Hash: \t" + this.hash + "\n";
+		tempStr += "Block ID: \t" + this.index + "\n" +
+					"Prev Block ID: \t" + this.prevBlockHash + "\n" +
+					"Block Time: \t" + this.time + "\n" +
+					"Block Hash: \t" + this.hash + "\n";
 
 		return tempStr;
 	}
