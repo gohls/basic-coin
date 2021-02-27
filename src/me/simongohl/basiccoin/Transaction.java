@@ -124,7 +124,9 @@ public class Transaction {
 
 	@Override
 	public String toString() {
-		return "\nPending Transaction: " + this.senderName + " is added " + this.coinAmount + " BasicCoin to " + this.receiverName + " wallet.";
+		return "\nTransaction: " + this.senderName + " added " + 
+				this.coinAmount + " BasicCoin(s) to " + this.receiverName + 
+				"'s wallet with " + this.memo + " as memo.";
 	}
 	
 }
