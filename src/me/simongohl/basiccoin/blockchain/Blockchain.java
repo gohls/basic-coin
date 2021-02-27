@@ -8,16 +8,6 @@ import java.util.LinkedList;
 
 import me.simongohl.basiccoin.wallet.Wallet;
 
-
-/**
-* BasicCoin is a simple implementation of blockchain technology,
-* applying Proof-of-Work (PoW) as its consensus algorithm.
-*
-* Right now, it's just a terminal application. 
-* 
-* @author  Simon Gohl
-* @version 0.0.0
-*/
 public class Blockchain {
 	public static final int MAX_BLOCK_SIZE = 5;
 	public static final int MINING_DIFFICULTY = 3;
@@ -100,6 +90,8 @@ public class Blockchain {
 			}
 		}
 	}
+	
+	//@TODO Get Transaction history of Wallet 
 	
 	public Wallet addWallet(String name, int balance) throws NoSuchAlgorithmException {
 		Wallet wallet = new Wallet(name, balance);

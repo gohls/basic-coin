@@ -2,7 +2,7 @@ package me.simongohl.basiccoin;
 
 import java.security.NoSuchAlgorithmException;
 
-import me.simongohl.basiccoin.blockchain.*;
+import me.simongohl.basiccoin.blockchain.Blockchain;
 
 
 /**
