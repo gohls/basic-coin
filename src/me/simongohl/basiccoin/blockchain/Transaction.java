@@ -1,4 +1,4 @@
-package me.simongohl.basiccoin;
+package me.simongohl.basiccoin.blockchain;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
