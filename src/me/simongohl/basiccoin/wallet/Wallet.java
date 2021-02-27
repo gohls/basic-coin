@@ -49,7 +49,7 @@ public class Wallet {
 		return this.pair.getPublic();
 	}
 
-	//@TODO 🤦 🙅‍♂️ 🚨 not secure; needs work 🤷
+	//@TODO not secure 🤦 🙅‍♂️ 🚨; needs work 🤷
 	public PrivateKey getPrivateKey() {
 		return this.pair.getPrivate();
 	}
