@@ -44,7 +44,7 @@ public class Block {
 		return encodedHash;
 	}
 	
-	public void mineBlock() throws NoSuchAlgorithmException {
+	public String mineBlock() throws NoSuchAlgorithmException {
 		int miningDifficulty = BasicCoin.MINING_DIFFICULTY;
 		String hashStartsWith = "";
 		for (int i = 0; i < miningDifficulty; i++) {
@@ -58,7 +58,8 @@ public class Block {
 		} while (!hashStartsWith.equals((this.hash.substring(0, miningDifficulty))));
 		
 		System.out.println("Mining done!");
-		System.out.println("Block hash:" + this.hash);
+		
+		return this.hash;
 	}
 	
 	public boolean hasValidTransactions(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
@@ -76,7 +77,7 @@ public class Block {
 	@Override
 	public String toString() {
 		String tempStr = "";
-		tempStr += "Block ID: \t" + this.index + "\n" +
+		tempStr += "\nBlock ID: \t" + this.index + "\n" +
 					"Prev Block ID: \t" + this.prevBlockHash + "\n" +
 					"Block Time: \t" + this.time + "\n" +
 					"Block Hash: \t" + this.hash + "\n";

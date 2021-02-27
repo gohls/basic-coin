@@ -69,29 +69,21 @@ public class Transaction {
 		}
 
 		try {
-			
-			
 			Wallet senderWallet = wallets.get(senderName);
-			
+	
 			Signature sig = Signature.getInstance(HASH_ENCRYPTION_ALGORITHM);
 			sig.initSign(senderWallet.getPrivateKey());
-			byte[] transactionBytes = this.hash.getBytes(CHARSET);
+			
+			final byte[] transactionBytes = this.hash.getBytes(CHARSET);
 			sig.update(transactionBytes);
-			byte[] signatureBytes = sig.sign();
-			
-//			this.signature = Base64.getEncoder().encodeToString(signatureBytes);
-			
-			sig.initVerify(senderWallet.getPublicKey());
-			sig.update(transactionBytes);
-			System.out.print("Verify check: " + sig.verify(signatureBytes));
-			
-			
+			final byte[] signatureBytes = sig.sign();
+			this.signature = Base64.getEncoder().encodeToString(signatureBytes);
+						
 			System.out.println("\n Transaction signed!");
 		} catch (Exception e){
 			isSigned = false;
 			System.out.println("\n Error: signing failed.");
 		}
-		System.out.println(this.signature);
 		
 		return isSigned;
 	}
@@ -121,19 +113,20 @@ public class Transaction {
 			if(!sig.verify(signatureBytes)){
 				isValid = false;
 			} else {
-				System.out.println("\nTransaction validated!");
+				System.out.println("\nTransaction verified!");
 			}
 		} catch (Exception e){
 			isValid = false;
 			System.out.println("\nError: " + e);
 		}
-		System.out.print("\n isValid 2: " + isValid);
 		return isValid;
 	}
 
 	@Override
 	public String toString() {
-		return "\nPending Transaction: " + this.senderName + " is added " + this.coinAmount + " BasicCoin to " + this.receiverName + " wallet.";
+		return "\nTransaction: " + this.senderName + " added " + 
+				this.coinAmount + " BasicCoin(s) to " + this.receiverName + 
+				"'s wallet with " + this.memo + " as memo.";
 	}
 	
 }
