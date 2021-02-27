@@ -1,5 +1,6 @@
 package me.simongohl.basiccoin;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
@@ -12,6 +13,9 @@ import me.simongohl.basiccoin.wallet.Wallet;
 
 
 public class Transaction {
+	private static final Charset CHARSET = StandardCharsets.UTF_8;
+	private static final String HASH_ENCRYPTION_ALGORITHM = "SHA256withRSA";
+			
 	String senderName;
 	String receiverName;
 	int coinAmount;
@@ -56,34 +60,38 @@ public class Transaction {
 	//@TODO is passing in all wallets a good way of doing this?
 	public boolean signTransaction(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
 		boolean isSigned = true;
-		System.out.println("\n this.hash: " + this.hash);
-		System.out.println("\n compute: " + this.computeTransactionHash());
 		if(!this.hash.equals(this.computeTransactionHash())) {
-			
 			isSigned = false;
 		}
-		System.out.print("\nCheck isSigned 1: " + isSigned);
-		System.out.println("\n sender: " + wallets.containsKey(this.senderName));
-		System.out.println("\n receiver: " + wallets.containsKey(this.receiverName));
+
 		if(!wallets.containsKey(this.senderName) || !wallets.containsKey(this.receiverName)) {
-			System.out.println("\n Goes in here");
 			isSigned = false;
 		}
-		System.out.print("\nCheck isSigned 2: " + isSigned);
+
 		try {
-			byte[] transactionBytes = this.hash.getBytes(StandardCharsets.UTF_8);
-			Signature sig = Signature.getInstance("SHA256withRSA");
-			Wallet senderWallet = (Wallet) wallets.get(senderName);
+			
+			
+			Wallet senderWallet = wallets.get(senderName);
+			
+			Signature sig = Signature.getInstance(HASH_ENCRYPTION_ALGORITHM);
 			sig.initSign(senderWallet.getPrivateKey());
+			byte[] transactionBytes = this.hash.getBytes(CHARSET);
 			sig.update(transactionBytes);
 			byte[] signatureBytes = sig.sign();
-			this.signature = Base64.getEncoder().encodeToString(signatureBytes);
-			System.out.println("\nTransaction signed!");
+			
+//			this.signature = Base64.getEncoder().encodeToString(signatureBytes);
+			
+			sig.initVerify(senderWallet.getPublicKey());
+			sig.update(transactionBytes);
+			System.out.print("Verify check: " + sig.verify(signatureBytes));
+			
+			
+			System.out.println("\n Transaction signed!");
 		} catch (Exception e){
 			isSigned = false;
-			System.out.println("\nError signing...");
+			System.out.println("\n Error: signing failed.");
 		}
-		System.out.print("\nCheck isSigned 3: " + isSigned);
+		System.out.println(this.signature);
 		
 		return isSigned;
 	}
@@ -97,17 +105,20 @@ public class Transaction {
 				this.coinAmount <= 0) {
 			isValid = false;
 		}
-		System.out.print("\n isValid 1: " + isValid);
+
 		try {
-			byte[] transactionBytes = this.hash.getBytes(StandardCharsets.UTF_8);
-			Signature sig = Signature.getInstance("SHA256withRSA");
-			Wallet senderWallet =  (Wallet) wallets.get(senderName);
+			byte[] transactionBytes = this.hash.getBytes(CHARSET);
+			
+			Wallet senderWallet =  wallets.get(senderName);
+			
+			Signature sig = Signature.getInstance(HASH_ENCRYPTION_ALGORITHM);
+
 			sig.initVerify(senderWallet.getPublicKey());
 			sig.update(transactionBytes);
+
 			byte[] signatureBytes = Base64.getDecoder().decode(this.signature);
 			
 			if(!sig.verify(signatureBytes)){
-				System.out.println("if verify");
 				isValid = false;
 			} else {
 				System.out.println("\nTransaction validated!");

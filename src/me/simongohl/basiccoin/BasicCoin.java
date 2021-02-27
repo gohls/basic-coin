@@ -67,7 +67,7 @@ public class BasicCoin {
 		transaction.signTransaction(this.wallets);
 		if (!transaction.isValidTransaction(this.wallets)) {
 			isAdded = false;
-			System.out.println("\nError: Transaction validation failed asdfas fasd!");
+			System.out.println("\n Error: Transaction validation failed!");
 		} else {
 			this.pendingTransactions.add(transaction);
 			System.out.println("Transaction added!");

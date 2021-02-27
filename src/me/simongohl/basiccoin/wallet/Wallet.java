@@ -48,7 +48,7 @@ public class Wallet {
 	}
 
 	public PublicKey getPublicKey() {
-		return publicKey;
+		return this.publicKey;
 	}
 
 	//@TODO 🤦 🙅‍♂️ 🚨 not secure; needs work 🤷
