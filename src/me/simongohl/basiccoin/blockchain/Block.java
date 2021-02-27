@@ -1,4 +1,4 @@
-package me.simongohl.basiccoin;
+package me.simongohl.basiccoin.blockchain;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class Block {
 	}
 	
 	public String mineBlock() throws NoSuchAlgorithmException {
-		int miningDifficulty = BasicCoin.MINING_DIFFICULTY;
+		int miningDifficulty = Blockchain.MINING_DIFFICULTY;
 		String hashStartsWith = "";
 		for (int i = 0; i < miningDifficulty; i++) {
 			hashStartsWith += i;
