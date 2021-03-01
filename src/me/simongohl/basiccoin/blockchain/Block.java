@@ -64,7 +64,7 @@ public class Block {
 	
 	public boolean hasValidTransactions(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
 		boolean hasValidTransactions = true;
-		for(Transaction t : this.transactions) {
+		for (Transaction t : this.transactions) {
 			if(!t.isValidTransaction(wallets)) {
 				hasValidTransactions = false;
 				break;

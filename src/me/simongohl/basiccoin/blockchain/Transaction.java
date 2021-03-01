@@ -60,11 +60,11 @@ public class Transaction {
 	//@TODO is passing in all wallets a good way of doing this?
 	public boolean signTransaction(Hashtable<String, Wallet> wallets) throws NoSuchAlgorithmException {
 		boolean isSigned = true;
-		if(!this.hash.equals(this.computeTransactionHash())) {
+		if (!this.hash.equals(this.computeTransactionHash())) {
 			isSigned = false;
 		}
 
-		if(!wallets.containsKey(this.senderName) || !wallets.containsKey(this.receiverName)) {
+		if (!wallets.containsKey(this.senderName) || !wallets.containsKey(this.receiverName)) {
 			isSigned = false;
 		}
 
@@ -119,6 +119,7 @@ public class Transaction {
 			isValid = false;
 			System.out.println("\nError: " + e);
 		}
+		
 		return isValid;
 	}
 
