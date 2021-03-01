@@ -1,4 +1,5 @@
 # Source: https://www.jamescoyle.net/how-to/supporting-scripts/3027-gitignore-file-for-eclipse-projects
+
 # Java related
 target/**
 *.jar
@@ -27,3 +28,6 @@ local.properties
 
 # Locally stored "Eclipse launch configurations"
 *.launch
+
+# macOS specific
+.DS_Store
