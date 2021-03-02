@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 import me.simongohl.basiccoin.blockchain.Blockchain;
+import me.simongohl.basiccoin.wallet.Wallet;
 
 
 /**
@@ -16,22 +17,36 @@ import me.simongohl.basiccoin.blockchain.Blockchain;
 * @version 0.0.0
 */
 public class BasicCoin {
+	private final Wallet myWallet;
+
+	public BasicCoin(String name) throws NoSuchAlgorithmException {
+		this.myWallet = new Wallet(name, 100);
+	}
 	
-	public static void makeWallet() {}
+	public static void generateWallets() {}
+	
+	public static void printNames() {}
 	
 	public static void sendBasicCoin() {}
 	
+	public static void requestBasicCoin() {}
+	
 	public static void mineBlock() {}
 	
-	public static void getBalance() {}
+	public static void printBalance() {}
+	
+	public static void printBalanceOf() {}
+	
+	public static void printBalanceOfAll() {}
+	
+	public static void printTransactionHistory() {}
 	
 	public static void main(String[] agrs) throws NoSuchAlgorithmException {
-		
 		Blockchain basicCoin = new Blockchain();
 		basicCoin.addGenesisBlock();
 		
 		@SuppressWarnings("resource")
-		Scanner scan = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in);
 		int selectedOpt;
 		do {
 			System.out.println("\nBasicCoin Menu: \n" +
@@ -41,44 +56,22 @@ public class BasicCoin {
 								"4 \t Get Balance \n" +
 								"5 \t Exit \n\n");
 			System.out.print("Enter selection: ");
-			selectedOpt = scan.nextInt();
+			selectedOpt = scanner.nextInt();
 			
 			switch (selectedOpt) {
 				case 1:
-					 makeWallet();
+					 generateWallets();
 				case 2:
 					 sendBasicCoin();
 				case 3: 
 					 mineBlock();
 				case 4: 
-					 getBalance();
+					 printBalance();
 				default:
 					break;
 			}
 		}
 		while (selectedOpt != 5);
-		
-		
-		System.out.println("\ngenesis: " + basicCoin);	
-		basicCoin.addWallet("Simon", 100);
-		basicCoin.addWallet("Bill", 100);
-		basicCoin.addWallet("Elon", 100);
-		basicCoin.addWallet("Steve", 100);
-		basicCoin.addWallet("Jeff", 100);
-		basicCoin.addWallet("Warren", 100);
-		basicCoin.addTransaction("Simon", "Bill", "💻", 10);
-		basicCoin.addTransaction("Simon", "Elon", "🚀", 10);
-		basicCoin.addTransaction("Simon", "Steve", "🍎", 10);
-		basicCoin.addTransaction("Simon", "Jeff", "📚", 10);
-		basicCoin.addTransaction("Simon", "Warren", "📈", 10);
-		basicCoin.minePendingTransactions("Simon");
-
-		basicCoin.addTransaction("Jeff", "Simon", "📚", 10);
-		basicCoin.addTransaction("Warren", "Simon", "📈", 10);
-		basicCoin.addTransaction("Bill", "Simon", "💻", 10);
-		basicCoin.addTransaction("Elon", "Simon", "🚀", 10);
-		basicCoin.addTransaction("Steve", "Simon", "🍎", 10);
-		basicCoin.minePendingTransactions("Simon");
 		
 		System.out.println("\n" + basicCoin);
 	}
