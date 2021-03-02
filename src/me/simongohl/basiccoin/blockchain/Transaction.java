@@ -83,6 +83,7 @@ public class Transaction {
 		} catch (Exception e){
 			isSigned = false;
 			System.out.println("\n Error: signing failed.");
+			e.printStackTrace();
 		}
 		
 		return isSigned;
@@ -110,7 +111,7 @@ public class Transaction {
 
 			byte[] signatureBytes = Base64.getDecoder().decode(this.signature);
 			
-			if(!sig.verify(signatureBytes)){
+			if (!sig.verify(signatureBytes)){
 				isValid = false;
 			} else {
 				System.out.println("\nTransaction verified!");
