@@ -7,12 +7,12 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class FileTool {
-	private static final String FILE_READER_PATH = "./BasicCoin/sample_data.csv";
+	private static final String FILE_READER_PATH = "./sample_data.csv";
 	// private static final String FILE_WRITER_PATH = "./BasicCoin/transaction_history.csv";
 	
 	public static Set<String> readFile() {
 		// Type Set to avoid name clash with Wallets
-		Set<String> names = new HashSet<String>();
+		Set<String> data = new HashSet<String>();
 		
 		try {
 		  	File fileObj = new File(FILE_READER_PATH);
@@ -25,7 +25,7 @@ public class FileTool {
 		  			header = false;
 		  		}
 				String name = scanner.nextLine();
-				names.add(name);
+				data.add(name);
 				}
 		  	scanner.close();
 		    } catch (FileNotFoundException e) {
@@ -33,7 +33,7 @@ public class FileTool {
 		    	e.printStackTrace();
 		    }
 		
-		return names;
+		return data;
 	}
 	
 	public static void writeFile() {
