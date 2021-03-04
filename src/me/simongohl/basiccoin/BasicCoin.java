@@ -1,9 +1,11 @@
 package me.simongohl.basiccoin;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import me.simongohl.basiccoin.blockchain.Blockchain;
+import me.simongohl.basiccoin.util.FileTool;
 import me.simongohl.basiccoin.wallet.Wallet;
 
 
@@ -17,15 +19,20 @@ import me.simongohl.basiccoin.wallet.Wallet;
 * @version 0.0.0
 */
 public class BasicCoin {
-	private final Wallet myWallet;
-
-	public BasicCoin(String name) throws NoSuchAlgorithmException {
-		this.myWallet = new Wallet(name, 100);
+	public static void generateWallets() {
+		ArrayList<String> data = new ArrayList<String>(FileTool.readFile());
+		for (String d : data) {
+			// @TODO parse data between name and amount
+			// Basiccoin.addWallet(name);
+			System.out.println(d);
+		}
 	}
 	
-	public static void generateWallets() {}
-	
-	public static void printNames() {}
+	public static void printWalletNames() {
+//		for (Wallet wallet : Basiccoin.wallets) {
+//			System.out.println(wallet.name)
+//		}
+	}
 	
 	public static void sendBasicCoin() {}
 	
@@ -50,7 +57,7 @@ public class BasicCoin {
 		int selectedOpt;
 		do {
 			System.out.println("\nBasicCoin Menu: \n" +
-								"1.\t Make a Wallet \n" + 
+								"1.\t Generate Wallets \n" + 
 								"2 \t Send BasicCoin \n" +
 								"3 \t Mine Block \n" +
 								"4 \t Get Balance \n" +
