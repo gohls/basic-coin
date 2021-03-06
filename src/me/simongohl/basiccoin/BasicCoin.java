@@ -28,6 +28,8 @@ public class BasicCoin {
 		}
 	}
 	
+	public static void generateTransactions() {}
+	
 	public static void printWalletNames() {
 //		for (Wallet wallet : Basiccoin.wallets) {
 //			System.out.println(wallet.name)
@@ -40,11 +42,11 @@ public class BasicCoin {
 	
 	public static void mineBlock() {}
 	
-	public static void printBalance() {}
+	public static void getBalance() {}
 	
-	public static void printBalanceOf() {}
+	public static void getBalanceOf() {}
 	
-	public static void printBalanceOfAll() {}
+	public static void getBalanceOfAll() {}
 	
 	public static void printTransactionHistory() {}
 	
@@ -73,7 +75,7 @@ public class BasicCoin {
 				case 3: 
 					 mineBlock();
 				case 4: 
-					 printBalance();
+					 getBalance();
 				default:
 					break;
 			}
