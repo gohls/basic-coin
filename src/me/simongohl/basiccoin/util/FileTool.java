@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class FileTool {
 	private static final String FILE_READER_PATH = "./sample_data.csv";
-	// private static final String FILE_WRITER_PATH = "./BasicCoin/transaction_history.csv";
+	// private static final String FILE_WRITER_PATH = "./transaction_history.csv";
 	
 	public static Set<String> readFile() {
 		// Type Set to avoid name clash with Wallets
