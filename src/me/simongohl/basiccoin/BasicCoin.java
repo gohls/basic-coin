@@ -3,6 +3,7 @@ package me.simongohl.basiccoin;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Set;
 
 import me.simongohl.basiccoin.blockchain.Blockchain;
 import me.simongohl.basiccoin.util.FileTool;
@@ -24,25 +25,26 @@ public class BasicCoin {
 	public BasicCoin() {
 		this.basicCoin = new Blockchain();
 	}
-	
+
 	public void generateWallets() throws NumberFormatException, NoSuchAlgorithmException {
 		ArrayList<String> data = new ArrayList<String>(FileTool.readFile());
-		String[] walletArray = new String[2];
+		String[] walletDataArray = new String[2];
 		for (String d : data) {
-			// @TODO parse data between name and amount
-			// Basiccoin.addWallet(name);
-			System.out.println(d);
-			walletArray = d.split(",");
-			this.basicCoin.addWallet(walletArray[0], Integer.parseInt(walletArray[1]));
+			// @TODO some error handling would be good here
+			walletDataArray = d.split(",");
+			this.basicCoin.addWallet(walletDataArray[0], Integer.parseInt(walletDataArray[1]));
 		}
 	}
 	
-	public static void generateTransactions() {}
+	public void printWalletNames() {
+		Set<String> wallets = this.basicCoin.getWallets().keySet();
+		for (String name : wallets) {
+			System.out.println(name);
+		}
+	}
 	
-	public static void printWalletNames() {
-//		for (Wallet wallet : Basiccoin.wallets) {
-//			System.out.println(wallet.name)
-//		}
+	public static void generateTransactions() {
+		
 	}
 	
 	public static void makeATransaction() {}
@@ -69,27 +71,34 @@ public class BasicCoin {
 	public static void main(String[] agrs) throws NoSuchAlgorithmException {
 		BasicCoin basicCoin = new BasicCoin();
 		
+		System.out.print("Generating Wallets...");
+		basicCoin.generateWallets();
+		System.out.print("Completed!");
+		
+		
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		int selectedOpt;
 		do {
 			System.out.println("\nBasicCoin Menu: \n" +
 								"1.\t Generate Wallets \n" + 
-								"2 \t Send BasicCoin \n" +
-								"3 \t Mine Block \n" +
-								"4 \t Get Balance \n" +
-								"5 \t Exit \n\n");
+								"2. \t Print Wallet Names \n" +
+								"3. \t Mine Block \n" +
+								"4. \t Get Balance \n" +
+								"5. \t Exit \n\n");
 			System.out.print("Enter selection: ");
 			selectedOpt = scanner.nextInt();
 			
 			switch (selectedOpt) {
 				case 1:
-					 generateWallets();
-				case 2:
+					basicCoin.generateWallets();
+				case 2: 
+					basicCoin.printWalletNames();
+				case 3:
 					makeATransaction();
-				case 3: 
-					 mineBlock();
 				case 4: 
+					 mineBlock();
+				case 5: 
 					 getBalance();
 				default:
 					break;

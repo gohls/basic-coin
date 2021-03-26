@@ -103,10 +103,13 @@ public class Blockchain {
 		return this.wallets.get(name);
 	}
 	
+	public Hashtable<String, Wallet> getWallets() {
+		return this.wallets;
+	}
+	
 	public Wallet addWallet(String name, int balance) throws NoSuchAlgorithmException {
 		Wallet wallet = new Wallet(name, balance);
 		this.wallets.put(name, wallet);
-		System.out.println("Wallet added!");
 		return wallet;
 	}
 	
