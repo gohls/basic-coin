@@ -22,9 +22,15 @@ public class Blockchain {
 		this.pendingTransactions = new ArrayList<Transaction>();
 		//@TODO Not sure if I want wallets in here 🤷..not secure 🤦 🙅‍♂️ 🚨!!!
 		this.wallets = new Hashtable<String, Wallet>();
+		
+		try {
+			addGenesisBlock();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 	 }
 
-	public void addGenesisBlock() throws NoSuchAlgorithmException {
+	final void addGenesisBlock() throws NoSuchAlgorithmException {
 		Transaction transaction = new Transaction("Basic", "Coin", "genesis", 1);
 		this.pendingTransactions.add(transaction);
 		Block genesis = new Block(0, null, this.pendingTransactions, new Date().toString());
@@ -92,6 +98,10 @@ public class Blockchain {
 	}
 	
 	//@TODO Get Transaction history of Wallet 
+	
+	public Wallet getWallet(String name) {
+		return this.wallets.get(name);
+	}
 	
 	public Wallet addWallet(String name, int balance) throws NoSuchAlgorithmException {
 		Wallet wallet = new Wallet(name, balance);
