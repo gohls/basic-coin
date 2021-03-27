@@ -21,12 +21,17 @@ import me.simongohl.basiccoin.wallet.Wallet;
 */
 public class BasicCoin {
 	Blockchain basicCoin;
+	String name;
+	Wallet wallet;
 	
-	public BasicCoin() {
+	public BasicCoin(String name) throws NoSuchAlgorithmException {
 		this.basicCoin = new Blockchain();
+		this.name = name;
+		this.wallet = this.basicCoin.addWallet(this.name, 100);
 	}
+	
 
-	public void generateWallets() throws NumberFormatException, NoSuchAlgorithmException {
+	final void generateWallets() throws NumberFormatException, NoSuchAlgorithmException {
 		ArrayList<String> data = new ArrayList<String>(FileTool.readFile());
 		String[] walletDataArray = new String[2];
 		for (String d : data) {
@@ -37,15 +42,15 @@ public class BasicCoin {
 		}
 	}
 	
+	final void generateTransactions() {
+//		System.out.println("");
+	}
+	
 	public void printWalletNames() {
 		Set<String> wallets = this.basicCoin.getWallets().keySet();
 		for (String name : wallets) {
 			System.out.println(name);
 		}
-	}
-	
-	public void generateTransactions() {
-		System.out.println("");
 	}
 	
 	public static void makeATransaction() {
@@ -60,8 +65,8 @@ public class BasicCoin {
 		
 	}
 	
-	public static void getBalance() {
-		
+	public int getBalance() {
+		return this.wallet.getBalance();
 	}
 	
 	public int getBalanceOf(String name) {
@@ -69,31 +74,47 @@ public class BasicCoin {
 		return wallet.getBalance();
 	}
 	
-	public static void getBalanceOfAll() {}
+	public static void getBalanceOfAll() {
+		
+	}
 	
 	public static void printTransactionHistory() {}
 	
-	public static void main(String[] agrs) throws NoSuchAlgorithmException {
-		BasicCoin basicCoin = new BasicCoin();
+	public static void main(String[] agrs) throws NoSuchAlgorithmException {	
+		// 1. Print BasicCoin Logo
+		// Not the best ascii text art 
+		System.out.println("  ||===\\\\       //===\\\\    ");
+		System.out.println("  ||   ||      ||          ");
+		System.out.println("  ||===//      ||          ");
+		System.out.println("  ||   \\\\      ||          ");
+		System.out.println("  ||   || asic ||      oin ");
+		System.out.println("  ||===//       \\\\===//    ");
 		
-		// Not the best ascii art 
-		System.out.println("  ##===\\       //===\\    ");
-		System.out.println("  ##   ||      ##          ");
-		System.out.println("  ##===//      ##          ");
-		System.out.println("  ##   \\      ##          ");
-		System.out.println("  ##   || asic ##      oin ");
-		System.out.println("  ##===//       \\===//    ");
+		// 2. Get name to create Wallet
 		System.out.println("");
-		System.out.println("Intializing!");
-		System.out.print("Generating Wallets...");
-		basicCoin.generateWallets();
-		System.out.print("Completed!");
-		basicCoin.generateTransactions();
-		System.out.print("Generating Wallets...");
-		System.out.print("Completed!");
-		
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
+		System.out.print("To get started, Enter your first name: ");
+		String name = scanner.nextLine();
+		
+		System.out.println("");
+		System.out.println("Intializing!");
+		
+		System.out.print("- Creating your wallet... ");
+		BasicCoin basicCoin = new BasicCoin(name);
+		System.out.print("Completed!");
+		System.out.println("");
+		
+		System.out.print("- Generating wallets (this may take a minute)... ");
+		basicCoin.generateWallets();
+		System.out.print("Completed!");
+		System.out.println("");
+		
+		System.out.print("- Generating some transactions... ");
+		basicCoin.generateTransactions();
+		System.out.print("Completed!");
+		System.out.println("");
+		
 		int selectedOpt;
 		do {
 			System.out.println("\nBasicCoin Menu: \n" +
@@ -115,7 +136,7 @@ public class BasicCoin {
 				case 4: 
 					 mineBlock();
 				case 5: 
-					 getBalance();
+//					 getBalance();
 				default:
 					break;
 			}
