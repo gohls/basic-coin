@@ -31,6 +31,7 @@ public class BasicCoin {
 		String[] walletDataArray = new String[2];
 		for (String d : data) {
 			// @TODO some error handling would be good here
+			// - Make sure no name is used twice (not sure what happens when there is a collision..error?)
 			walletDataArray = d.split(",");
 			this.basicCoin.addWallet(walletDataArray[0], Integer.parseInt(walletDataArray[1]));
 		}
@@ -43,13 +44,17 @@ public class BasicCoin {
 		}
 	}
 	
-	public static void generateTransactions() {
-		
+	public void generateTransactions() {
+		System.out.println("");
 	}
 	
-	public static void makeATransaction() {}
+	public static void makeATransaction() {
+		System.out.println("");
+	}
 	
-	public static void requestBasicCoin() {}
+	public static void requestBasicCoin() {
+		
+	}
 	
 	public static void mineBlock() {
 		
@@ -71,10 +76,21 @@ public class BasicCoin {
 	public static void main(String[] agrs) throws NoSuchAlgorithmException {
 		BasicCoin basicCoin = new BasicCoin();
 		
+		// Not the best ascii art 
+		System.out.println("  ##===\\       //===\\    ");
+		System.out.println("  ##   ||      ##          ");
+		System.out.println("  ##===//      ##          ");
+		System.out.println("  ##   \\      ##          ");
+		System.out.println("  ##   || asic ##      oin ");
+		System.out.println("  ##===//       \\===//    ");
+		System.out.println("");
+		System.out.println("Intializing!");
 		System.out.print("Generating Wallets...");
 		basicCoin.generateWallets();
 		System.out.print("Completed!");
-		
+		basicCoin.generateTransactions();
+		System.out.print("Generating Wallets...");
+		System.out.print("Completed!");
 		
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
