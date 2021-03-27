@@ -21,19 +21,29 @@ import me.simongohl.basiccoin.wallet.Wallet;
 */
 public class BasicCoin {
 	Blockchain basicCoin;
+	String name;
+	Wallet wallet;
 	
-	public BasicCoin() {
+	public BasicCoin(String name) throws NoSuchAlgorithmException {
 		this.basicCoin = new Blockchain();
+		this.name = name;
+		this.wallet = this.basicCoin.addWallet(this.name, 100);
 	}
+	
 
-	public void generateWallets() throws NumberFormatException, NoSuchAlgorithmException {
+	final void generateWallets() throws NumberFormatException, NoSuchAlgorithmException {
 		ArrayList<String> data = new ArrayList<String>(FileTool.readFile());
 		String[] walletDataArray = new String[2];
 		for (String d : data) {
 			// @TODO some error handling would be good here
+			// - Make sure no name is used twice (not sure what happens when there is a collision..error?)
 			walletDataArray = d.split(",");
 			this.basicCoin.addWallet(walletDataArray[0], Integer.parseInt(walletDataArray[1]));
 		}
+	}
+	
+	final void generateTransactions() {
+//		System.out.println("");
 	}
 	
 	public void printWalletNames() {
@@ -43,20 +53,20 @@ public class BasicCoin {
 		}
 	}
 	
-	public static void generateTransactions() {
-		
+	public static void makeATransaction() {
+		System.out.println("");
 	}
 	
-	public static void makeATransaction() {}
-	
-	public static void requestBasicCoin() {}
+	public static void requestBasicCoin() {
+		
+	}
 	
 	public static void mineBlock() {
 		
 	}
 	
-	public static void getBalance() {
-		
+	public int getBalance() {
+		return this.wallet.getBalance();
 	}
 	
 	public int getBalanceOf(String name) {
@@ -64,20 +74,47 @@ public class BasicCoin {
 		return wallet.getBalance();
 	}
 	
-	public static void getBalanceOfAll() {}
+	public static void getBalanceOfAll() {
+		
+	}
 	
 	public static void printTransactionHistory() {}
 	
-	public static void main(String[] agrs) throws NoSuchAlgorithmException {
-		BasicCoin basicCoin = new BasicCoin();
+	public static void main(String[] agrs) throws NoSuchAlgorithmException {	
+		// 1. Print BasicCoin Logo
+		// Not the best ascii text art 
+		System.out.println("  ||===\\\\       //===\\\\    ");
+		System.out.println("  ||   ||      ||          ");
+		System.out.println("  ||===//      ||          ");
+		System.out.println("  ||   \\\\      ||          ");
+		System.out.println("  ||   || asic ||      oin ");
+		System.out.println("  ||===//       \\\\===//    ");
 		
-		System.out.print("Generating Wallets...");
-		basicCoin.generateWallets();
-		System.out.print("Completed!");
-		
-		
+		// 2. Get name to create Wallet
+		System.out.println("");
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
+		System.out.print("To get started, Enter your first name: ");
+		String name = scanner.nextLine();
+		
+		System.out.println("");
+		System.out.println("Intializing!");
+		
+		System.out.print("- Creating your wallet... ");
+		BasicCoin basicCoin = new BasicCoin(name);
+		System.out.print("Completed!");
+		System.out.println("");
+		
+		System.out.print("- Generating wallets (this may take a minute)... ");
+		basicCoin.generateWallets();
+		System.out.print("Completed!");
+		System.out.println("");
+		
+		System.out.print("- Generating some transactions... ");
+		basicCoin.generateTransactions();
+		System.out.print("Completed!");
+		System.out.println("");
+		
 		int selectedOpt;
 		do {
 			System.out.println("\nBasicCoin Menu: \n" +
@@ -99,7 +136,7 @@ public class BasicCoin {
 				case 4: 
 					 mineBlock();
 				case 5: 
-					 getBalance();
+//					 getBalance();
 				default:
 					break;
 			}
