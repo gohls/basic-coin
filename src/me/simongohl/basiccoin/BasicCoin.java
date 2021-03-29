@@ -2,6 +2,8 @@ package me.simongohl.basiccoin;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -20,6 +22,8 @@ import me.simongohl.basiccoin.wallet.Wallet;
 * @version 0.0.0
 */
 public class BasicCoin {
+	public static final int GENERATE_TRANSACTIONS_NUM = 25;
+	
 	Blockchain basicCoin;
 	String name;
 	Wallet wallet;
@@ -30,7 +34,11 @@ public class BasicCoin {
 		this.wallet = this.basicCoin.addWallet(this.name, 100);
 	}
 	
-
+	/*
+	 * Generates some Wallets to build a history of transactions, plus, 
+	 * make and request transactions. 
+	 * (i.e. we can't do anything with just one, the user's, wallet) 
+	 */
 	final void generateWallets() throws NumberFormatException, NoSuchAlgorithmException {
 		ArrayList<String> data = new ArrayList<String>(FileTool.readFile());
 		String[] walletDataArray = new String[2];
@@ -43,7 +51,25 @@ public class BasicCoin {
 	}
 	
 	final void generateTransactions() {
-//		System.out.println("");
+		Hashtable<String, Wallet> wallets = this.basicCoin.getWallets();
+		int numOfWallets = wallets.size();
+		
+		String[] names = wallets.keySet().toArray(new String[numOfWallets]);
+		Random random = new Random();
+		String nameSender;
+		String nameReceiver;
+		for (int i = 0; i < GENERATE_TRANSACTIONS_NUM; i++) {
+			nameSender = names[random.nextInt(names.length)];
+			nameReceiver = names[random.nextInt(names.length)];
+			
+			Wallet walletSender = this.basicCoin.getWallet(nameSender);
+			Wallet walletReceiver = this.basicCoin.getWallet(nameReceiver);
+			
+			
+		}
+		
+		
+		
 	}
 	
 	public void printWalletNames() {
