@@ -22,7 +22,9 @@ import me.simongohl.basiccoin.wallet.Wallet;
 * @version 0.0.0
 */
 public class BasicCoin {
-	public static final int GENERATE_TRANSACTIONS_NUM = 25;
+	private static final int UPPER_BOUND = 25;
+	private static final int GENERATE_TRANSACTIONS_NUM = new Random().nextInt(UPPER_BOUND);
+	private static final int SEND_AMT_UPPER_BOUND = 25; 
 	
 	Blockchain basicCoin;
 	String name;
@@ -35,19 +37,25 @@ public class BasicCoin {
 	}
 	
 	/*
-	 * Generates some Wallets to build a history of transactions, plus, 
-	 * make and request transactions. 
-	 * (i.e. we can't do anything with just one, the user's, wallet) 
+	 * Generates some Wallets to make transactions (just one wallet makes no sense)
 	 */
 	final void generateWallets() throws NumberFormatException, NoSuchAlgorithmException {
 		ArrayList<String> data = new ArrayList<String>(FileTool.readFile());
 		String[] walletDataArray = new String[2];
 		for (String d : data) {
 			// @TODO some error handling would be good here
-			// - Make sure no name is used twice (not sure what happens when there is a collision..error?)
+			// - Make sure no name is used twice (not sure what happens when there is a collision error?)
 			walletDataArray = d.split(",");
 			this.basicCoin.addWallet(walletDataArray[0], Integer.parseInt(walletDataArray[1]));
 		}
+	}
+	
+	public static boolean hasSufficientBalance(Wallet sender, int sendAmount) {
+		boolean hasSufficientBalance = false;
+		if (sender.getBalance() >= sendAmount) {
+			hasSufficientBalance = true; 
+		}
+		return hasSufficientBalance;
 	}
 	
 	final void generateTransactions() {
@@ -58,17 +66,40 @@ public class BasicCoin {
 		Random random = new Random();
 		String nameSender;
 		String nameReceiver;
-		for (int i = 0; i < GENERATE_TRANSACTIONS_NUM; i++) {
+		for (int i = 1; i < GENERATE_TRANSACTIONS_NUM; i++) {
+			if(i % this.basicCoin.MAX_BLOCK_SIZE == 0) { 
+				String randomMiner = names[random.nextInt(names.length)];
+				try {
+					this.basicCoin.minePendingTransactions(randomMiner);
+				} catch (NoSuchAlgorithmException e) {
+					System.out.println("Error: generating transactions failed while mining.");
+					e.printStackTrace();
+				}
+			}
 			nameSender = names[random.nextInt(names.length)];
 			nameReceiver = names[random.nextInt(names.length)];
 			
 			Wallet walletSender = this.basicCoin.getWallet(nameSender);
 			Wallet walletReceiver = this.basicCoin.getWallet(nameReceiver);
+			int sendAmount = new Random().nextInt(SEND_AMT_UPPER_BOUND);
+			boolean makeTransaction = hasSufficientBalance(walletSender, sendAmount);
 			
+			while (!makeTransaction) {
+				nameSender = names[random.nextInt(names.length)];
+				makeTransaction = hasSufficientBalance(walletSender, sendAmount);	
+			} 
+			
+			try {
+				this.basicCoin.addTransaction(nameSender, nameReceiver, "Generated transaction", sendAmount);
+			} catch (NoSuchAlgorithmException e) {
+				System.out.println("Error: generating tranactions failed while adding.");
+				e.printStackTrace();
+			}
+			
+			System.out.println("Remaining transactions: " + (i - GENERATE_TRANSACTIONS_NUM));
 			
 		}
-		
-		
+			
 		
 	}
 	
@@ -109,18 +140,22 @@ public class BasicCoin {
 	public static void main(String[] agrs) throws NoSuchAlgorithmException {	
 		// 1. Print BasicCoin Logo
 		// Not the best ascii text art 
-		System.out.println("  ||===\\\\       //===\\\\    ");
-		System.out.println("  ||   ||      ||          ");
-		System.out.println("  ||===//      ||          ");
-		System.out.println("  ||   \\\\      ||          ");
-		System.out.println("  ||   || asic ||      oin ");
-		System.out.println("  ||===//       \\\\===//    ");
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
+		System.out.println("~~~    |*|===\\*\\       /*/===\\*\\       ~~");
+		System.out.println("~      |*|    |*|      |*|            ~~~");
+		System.out.println("~~     |*|===/*/       |*|          ~~~~~");
+		System.out.println("~~~~   |*|   \\*\\       |*|           ~~~~");
+		System.out.println("~      |*|    |*| asic |*|      oin    ~~");
+		System.out.println("~~     |*|===/*/       \\*\\===/*/      ~~~");
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
 		
 		// 2. Get name to create Wallet
 		System.out.println("");
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
-		System.out.print("To get started, Enter your first name: ");
+		System.out.print("To get started, enter your first name: ");
 		String name = scanner.nextLine();
 		
 		System.out.println("");
@@ -136,7 +171,7 @@ public class BasicCoin {
 		System.out.print("Completed!");
 		System.out.println("");
 		
-		System.out.print("- Generating some transactions... ");
+		System.out.print("- Generating some transactions (this may take a few minutes)... ");
 		basicCoin.generateTransactions();
 		System.out.print("Completed!");
 		System.out.println("");

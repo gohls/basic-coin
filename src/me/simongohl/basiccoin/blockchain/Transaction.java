@@ -79,10 +79,10 @@ public class Transaction {
 			final byte[] signatureBytes = sig.sign();
 			this.signature = Base64.getEncoder().encodeToString(signatureBytes);
 						
-			System.out.println("\n Transaction signed!");
+			System.out.println("\nTransaction signed!");
 		} catch (Exception e){
 			isSigned = false;
-			System.out.println("\n Error: signing failed.");
+			System.out.println("\nError: signing failed.");
 			e.printStackTrace();
 		}
 		
