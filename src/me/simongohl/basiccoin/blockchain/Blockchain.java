@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import me.simongohl.basiccoin.wallet.Wallet;
 
 public class Blockchain {
-	public static final int MAX_BLOCK_SIZE = 5;
+	public final int MAX_BLOCK_SIZE = 5;
 	public static final int MINING_DIFFICULTY = 3;
 	public static final int MINING_REWARD = 10;
 	
